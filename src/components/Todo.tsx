@@ -1,13 +1,14 @@
-import React, { useState } from "react";
+import React, { useState, useSyncExternalStore } from "react";
+
+interface ToDo {
+  id: string;
+  task: string;
+  isCompleted: boolean;
+}
 
 function Todo() {
-  const todos = [
-    { id: 1, task: "todo app add 기능 구현하기", isCompleted: false },
-    { id: 2, task: "todo app delete 기능 구현하기", isCompleted: false },
-    { id: 3, task: "todo app style 입히기", isCompleted: false },
-  ];
-
   const [todo, setTodo] = useState("");
+  const [todos, setTodos] = useState<ToDo[]>([]);
 
   const onTodoChange = (ev: React.FormEvent<HTMLInputElement>) => {
     const {
@@ -17,9 +18,23 @@ function Todo() {
     setTodo(value);
   };
 
+  const onTodoFormSubmit = (ev: React.FormEvent<HTMLFormElement>) => {
+    ev.preventDefault();
+
+    console.log(todo);
+    const newTodo: ToDo = {
+      id: `${todo.length}-${new Date()}`,
+      task: todo,
+      isCompleted: false,
+    };
+
+    setTodos((prev) => [newTodo, ...prev]);
+    setTodo("");
+  };
+
   return (
     <main>
-      <form>
+      <form onSubmit={onTodoFormSubmit}>
         <input
           value={todo}
           onChange={onTodoChange}
