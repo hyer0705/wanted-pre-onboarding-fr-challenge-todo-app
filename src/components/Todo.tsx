@@ -21,15 +21,29 @@ function Todo() {
   const onTodoFormSubmit = (ev: React.FormEvent<HTMLFormElement>) => {
     ev.preventDefault();
 
-    console.log(todo);
     const newTodo: ToDo = {
-      id: `${todo.length}-${new Date()}`,
+      id: `${todos.length}-${new Date().getTime()}`,
       task: todo,
       isCompleted: false,
     };
 
     setTodos((prev) => [newTodo, ...prev]);
     setTodo("");
+  };
+
+  const onDeleteBtnClick = (ev: React.MouseEvent<HTMLButtonElement>) => {
+    const {
+      currentTarget: {
+        dataset: { id },
+      },
+    } = ev;
+
+    setTodos((prev) => {
+      // find id
+      const deleteIdx = todos.findIndex((todo) => todo.id === id);
+
+      return [...prev.slice(0, deleteIdx), ...prev.slice(deleteIdx + 1)];
+    });
   };
 
   return (
@@ -47,7 +61,9 @@ function Todo() {
         {todos.map((todo) => (
           <li key={todo.id}>
             <span>{todo.task}</span>
-            <button>Delete</button>
+            <button data-id={todo.id} onClick={onDeleteBtnClick}>
+              Delete
+            </button>
           </li>
         ))}
       </ul>
