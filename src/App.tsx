@@ -1,5 +1,7 @@
+import Todo from "./components/Todo";
+
 function App() {
-  return <>yaho!</>;
+  return <Todo />;
 }
 
 export default App;
